@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Amazonia Guardian | NASA Space Apps 2026</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+
+</head>
+<body>
+  <header class="topbar">
+    <div class="logo-container">
+      <h1>AMAZONIA <span>GUARDIAN</span></h1>
+      <p class="subtitle">NASA Space Apps 2026 · MODIS + VIIRS Challenge</p>
+    </div>
+    
+    <nav class="navbar">
+      <a href="{{ url_for('index') }}" class="nav-link">Dashboard</a>
+      
+      {% if current_user.is_authenticated %}
+        <div class="dropdown" id="userDropdown">
+          <button class="nav-btn dropbtn" onclick="toggleDropdown(event)">
+            👤 {{ current_user.username }} ▼
+          </button>
+          <div class="dropdown-content">
+            {% if current_user.role == 'admin' %}
+              <a href="{{ url_for('admin_panel') }}">⚙️ Admin Panel</a>
+            {% endif %}
+            <a href="{{ url_for('logout') }}" style="color: #ff6b35;">🚪 Logout</a>
+          </div>
+        </div>
+      {% else %}
+        <a href="{{ url_for('login') }}" class="nav-link">Login</a>
+        <a href="{{ url_for('register') }}" class="nav-btn">Register</a>
+      {% endif %}
+    </nav>
+  </header>
+  
+  <main>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          <div class="notice">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  {% block scripts %}{% endblock %}
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+
+
+    <script>
+    function toggleDropdown(event) {
+      event.stopPropagation(); // Evita que se cierre al hacer clic en el botón
+      document.getElementById("userDropdown").classList.toggle("show");
+    }
+
+    // Cierra el menú si haces clic fuera de él
+    window.onclick = function(event) {
+      if (!event.target.matches('.dropbtn')) {
+        var dropdowns = document.getElementsByClassName("dropdown-content");
+        for (var i = 0; i < dropdowns.length; i++) {
+          var openDropdown = dropdowns[i];
+          if (openDropdown.parentElement.classList.contains('show')) {
+            openDropdown.parentElement.classList.remove('show');
+          }
+        }
+      }
+    }
+  </script>
+
+</body>
+</html>
