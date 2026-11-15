@@ -1,38 +1,38 @@
 # 🛰️ Amazonia Guardian
 
-**Amazonia Guardian** es una aplicación web desarrollada para el **NASA Space Apps Challenge 2026**, abordando el desafío [**Harmonization of MODIS and VIIRS Hot Spots**](https://www.spaceappschallenge.org/).
+**Amazonia Guardian** is a web application developed for the **NASA Space Apps Challenge 2026**, addressing the [**Harmonization of MODIS and VIIRS Hot Spots**](https://www.spaceappschallenge.org/) challenge. 
 
-## 📖 Descripción del Proyecto
-El objetivo del proyecto es unificar los datos satelitales de los sensores MODIS y VIIRS para monitorear y analizar la actividad de incendios en la Amazonía peruana (Madre de Dios). La plataforma permite a los administradores importar archivos CSV oficiales de NASA FIRMS, visualizar los focos de calor en un mapa interactivo y detectar anomalías de intensidad térmica (FRP).
+## 📖 Project Description
+The goal of this project is to harmonize satellite data from the MODIS and VIIRS sensors to monitor and analyze fire activity in the Peruvian Amazon (Madre de Dios). The platform allows administrators to import official NASA FIRMS CSV files, visualize active heat spots on an interactive map, and detect thermal intensity anomalies (FRP).
 
-## ✨ Características Principales
-- **Gestión de Usuarios:** Registro, inicio de sesión y control de roles (Admin/Viewer).
-- **Base de Datos Relacional:** Almacenamiento persistente utilizando SQLite.
-- **CRUD Completo:** Panel de administración para Crear, Leer, Actualizar y Eliminar detecciones.
-- **Importación de Datos:** Procesamiento automático de archivos `.csv` de la NASA (MODIS/VIIRS).
-- **Visualización Interactiva:** Mapa satelital (Leaflet) con diferenciación de sensores por colores.
-- **Análisis de Anomalías:** Alerta visual (puntos rojos) para focos de calor con FRP > 20 MW.
-- **Gráficos Estadísticos:** Calendario de actividad mensual (Chart.js).
+## ✨ Key Features
+- **User Management:** Registration, login, and role-based access control (Admin/Viewer).
+- **Relational Database:** Persistent data storage using SQLite.
+- **Full CRUD Operations:** Admin panel to Create, Read, Update, and Delete fire detections.
+- **Data Import:** Automated processing of official NASA `.csv` files (MODIS/VIIRS).
+- **Interactive Visualization:** Satellite map (Leaflet) with color-coded sensors.
+- **Anomaly Detection:** Visual alerts (red markers) for high-intensity heat spots (FRP > 20 MW).
+- **Statistical Charts:** Monthly fire activity calendar (Chart.js).
 
-## 🛠️ Tecnologías Utilizadas
+## 🛠️ Tech Stack
 - **Backend:** Python 3, Flask, Flask-SQLAlchemy, Flask-Login
-- **Base de Datos:** SQLite
-- **Frontend:** HTML5, CSS3 (Diseño Premium Dark), JavaScript
-- **Librerías:** Leaflet (Mapas), Chart.js (Gráficos)
-- **Pruebas:** Pytest
-- **Despliegue:** Render
+- **Database:** SQLite
+- **Frontend:** HTML5, CSS3 (Premium Dark Theme), JavaScript
+- **Libraries:** Leaflet (Maps), Chart.js (Charts)
+- **Testing:** Pytest
+- **Deployment:** Render
 
-## 🚀 Instalación y Ejecución Local
-1. Clona este repositorio: `git clone https://github.com/tu-usuario/amazonia-guardian.git`
-2. Crea un entorno virtual: `python -m venv venv`
-3. Activa el entorno virtual:
+## 🚀 Local Installation & Setup
+1. Clone this repository: `git clone https://github.com/dpariona/amazonia_guardian.git`
+2. Create a virtual environment: `python -m venv venv`
+3. Activate the virtual environment:
    - Windows: `.\venv\Scripts\activate`
    - Mac/Linux: `source venv/bin/activate`
-4. Instala las dependencias: `pip install -r requirements.txt`
-5. Ejecuta la aplicación: `python app.py`
-6. Abre en tu navegador: `http://127.0.0.1:5000`
+4. Install dependencies: `pip install -r requirements.txt`
+5. Run the application: `python app.py`
+6. Open in your browser: `http://127.0.0.1:5000`
 
-## 🧪 Pruebas Automatizadas
-Para ejecutar las pruebas unitarias del sistema:
+## 🧪 Automated Testing
+To run the unit tests for the system:
 ```bash
 pytest tests/test_app.py -v
