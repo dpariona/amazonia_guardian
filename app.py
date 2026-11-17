@@ -1,7 +1,7 @@
 import os
 import csv
 import io
-from flask import Flask, render_template, request, jsonify, redirect, url_for, flash
+from flask import Flask, render_template, request, jsonify, redirect, url_for, flash, session
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from models import db, User, Detection
 from functools import wraps
@@ -19,6 +19,18 @@ login_manager.login_view = 'login'
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+# Context processor para inyectar 'lang' en todas las plantillas
+@app.context_processor
+def inject_lang():
+    return dict(lang=session.get('lang', 'en')) # Inglés por defecto
+
+# Ruta para cambiar el idioma
+@app.route('/set_lang/<lang>')
+def set_lang(lang):
+    if lang in ['en', 'es']:
+        session['lang'] = lang
+    return redirect(request.referrer or url_for('index'))
 
 def admin_required(f):
     @wraps(f)
@@ -40,14 +52,14 @@ def login():
         if user and user.check_password(request.form['password']):
             login_user(user)
             return redirect(url_for('index'))
-        flash('Usuario o contraseña incorrectos')
+        flash('Usuario o contraseña incorrectos / Incorrect username or password')
     return render_template('login.html')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
         if User.query.filter_by(username=request.form['username']).first():
-            flash('El usuario ya existe')
+            flash('El usuario ya existe / User already exists')
             return redirect(url_for('register'))
         
         is_admin = User.query.count() == 0
@@ -55,7 +67,7 @@ def register():
         new_user.set_password(request.form['password'])
         db.session.add(new_user)
         db.session.commit()
-        flash('Registro exitoso. Inicia sesión.')
+        flash('Registro exitoso. Inicia sesión. / Registration successful. Please log in.')
         return redirect(url_for('login'))
     return render_template('register.html')
 
@@ -69,7 +81,7 @@ def logout():
 @login_required
 def admin_panel():
     if current_user.role != 'admin':
-        return "Acceso denegado", 403
+        return "Acceso denegado / Access denied", 403
     return render_template('admin.html')
 
 # ================= API REST (CRUD) =================
@@ -112,19 +124,19 @@ def delete_detection(id):
     det = Detection.query.get_or_404(id)
     db.session.delete(det)
     db.session.commit()
-    return jsonify({"message": "Eliminado correctamente"}), 200
+    return jsonify({"message": "Eliminado correctamente / Successfully deleted"}), 200
 
 # ================= UPLOAD CSV =================
 @app.route('/upload_csv', methods=['POST'])
 @admin_required
 def upload_csv():
     if 'file' not in request.files:
-        flash('No se seleccionó ningún archivo.')
+        flash('No se seleccionó ningún archivo / No file selected.')
         return redirect(url_for('admin_panel'))
     
     file = request.files['file']
     if file.filename == '' or not file.filename.endswith('.csv'):
-        flash('Archivo no válido. Debe ser un archivo .csv de la NASA.')
+        flash('Archivo no válido. Debe ser un .csv / Invalid file. Must be a .csv file.')
         return redirect(url_for('admin_panel'))
 
     try:
@@ -156,10 +168,10 @@ def upload_csv():
         
         db.session.add_all(nuevas_detecciones)
         db.session.commit()
-        flash(f'¡Éxito! Se importaron {len(nuevas_detecciones)} detecciones desde {file.filename}.')
+        flash(f'¡Éxito! Se importaron {len(nuevas_detecciones)} detecciones / Successfully imported {len(nuevas_detecciones)} detections.')
         
     except Exception as e:
-        flash(f'Error al procesar el archivo: {str(e)}')
+        flash(f'Error al procesar el archivo / Error processing file: {str(e)}')
         
     return redirect(url_for('admin_panel'))
 

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="{{ lang }}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,8 +9,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-
-
 </head>
 <body>
   <header class="topbar">
@@ -20,7 +18,17 @@
     </div>
     
     <nav class="navbar">
-      <a href="{{ url_for('index') }}" class="nav-link">Dashboard</a>
+      <!-- SELECTOR DE IDIOMA -->
+      <div class="language-control" style="margin-right: 15px;">
+        <select onchange="window.location.href='/set_lang/' + this.value;" style="background: var(--bg-card); color: var(--accent-cyan); border: 1px solid var(--border-glow); padding: 8px 12px; border-radius: 8px; cursor: pointer; font-family: var(--font-body); outline: none;">
+            <option value="en" {% if lang == 'en' %}selected{% endif %}>🇺🇸 EN</option>
+            <option value="es" {% if lang == 'es' %}selected{% endif %}>🇪🇸 ES</option>
+        </select>
+      </div>
+
+      <a href="{{ url_for('index') }}" class="nav-link">
+        {% if lang == 'es' %}Panel{% else %}Dashboard{% endif %}
+      </a>
       
       {% if current_user.is_authenticated %}
         <div class="dropdown" id="userDropdown">
@@ -29,14 +37,14 @@
           </button>
           <div class="dropdown-content">
             {% if current_user.role == 'admin' %}
-              <a href="{{ url_for('admin_panel') }}">⚙️ Admin Panel</a>
+              <a href="{{ url_for('admin_panel') }}">⚙️ {% if lang == 'es' %}Panel de Admin{% else %}Admin Panel{% endif %}</a>
             {% endif %}
-            <a href="{{ url_for('logout') }}" style="color: #ff6b35;">🚪 Logout</a>
+            <a href="{{ url_for('logout') }}" style="color: #ff6b35;">🚪 {% if lang == 'es' %}Cerrar Sesión{% else %}Logout{% endif %}</a>
           </div>
         </div>
       {% else %}
-        <a href="{{ url_for('login') }}" class="nav-link">Login</a>
-        <a href="{{ url_for('register') }}" class="nav-btn">Register</a>
+        <a href="{{ url_for('login') }}" class="nav-link">{% if lang == 'es' %}Ingresar{% else %}Login{% endif %}</a>
+        <a href="{{ url_for('register') }}" class="nav-btn">{% if lang == 'es' %}Registrarse{% else %}Register{% endif %}</a>
       {% endif %}
     </nav>
   </header>
@@ -54,18 +62,12 @@
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  {% block scripts %}{% endblock %}
-
-  <script src="{{ url_for('static', filename='app.js') }}"></script>
-
-
-    <script>
+  
+  <script>
     function toggleDropdown(event) {
-      event.stopPropagation(); // Evita que se cierre al hacer clic en el botón
+      event.stopPropagation();
       document.getElementById("userDropdown").classList.toggle("show");
     }
-
-    // Cierra el menú si haces clic fuera de él
     window.onclick = function(event) {
       if (!event.target.matches('.dropbtn')) {
         var dropdowns = document.getElementsByClassName("dropdown-content");
@@ -78,6 +80,6 @@
       }
     }
   </script>
-
+  {% block scripts %}{% endblock %}
 </body>
 </html>

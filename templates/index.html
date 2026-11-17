@@ -2,19 +2,22 @@
 
 {% block content %}
 <section class="panel">
-  <h2>Fire Activity Dashboard</h2>
-  <p>Data loaded from the SQLite Database.</p>
+  <h2>{% if lang == 'es' %}Panel de Actividad de Incendios{% else %}Fire Activity Dashboard{% endif %}</h2>
+  <p>{% if lang == 'es' %}Datos cargados desde la base de datos SQLite.{% else %}Data loaded from the SQLite Database.{% endif %}</p>
   <div id="map"></div>
 </section>
 
 <section class="metrics">
-  <article class="metric panel"><span>Detections in area</span><strong id="totalCount">0</strong></article>
+  <article class="metric panel">
+    <span>{% if lang == 'es' %}Detecciones en área{% else %}Detections in area{% endif %}</span>
+    <strong id="totalCount">0</strong>
+  </article>
   <article class="metric panel"><span>MODIS</span><strong id="modisCount">0</strong></article>
   <article class="metric panel"><span>VIIRS</span><strong id="viirsCount">0</strong></article>
 </section>
 
 <section class="panel">
-  <h2>Detections by Month</h2>
+  <h2>{% if lang == 'es' %}Detecciones por Mes{% else %}Detections by Month{% endif %}</h2>
   <div class="chart-wrapper">
     <canvas id="monthlyChart"></canvas>
   </div>
